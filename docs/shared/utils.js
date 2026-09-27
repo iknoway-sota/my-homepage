@@ -117,6 +117,53 @@ function currentThemeId() {
   return match ? match[1] : '';
 }
 
+function isAutoGachaEnabled() {
+  return getLocal('randomThemeOnReload') === 'true';
+}
+
+function setAutoGachaEnabled(enabled) {
+  setLocal('randomThemeOnReload', enabled ? 'true' : 'false');
+}
+
+function wasReloaded() {
+  var entries = performance.getEntriesByType && performance.getEntriesByType('navigation');
+  if (entries && entries[0]) return entries[0].type === 'reload';
+  return performance.navigation && performance.navigation.type === performance.navigation.TYPE_RELOAD;
+}
+
+function addAutoGachaToggle() {
+  var switchControl = document.querySelector('.nav-switch, .theme-switch');
+  if (!switchControl || switchControl.parentElement.querySelector('.theme-auto-toggle')) return;
+
+  var toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'theme-auto-toggle';
+
+  function renderToggle() {
+    var enabled = isAutoGachaEnabled();
+    toggle.textContent = '自動 ' + (enabled ? 'ON' : 'OFF');
+    toggle.setAttribute('aria-pressed', String(enabled));
+    toggle.setAttribute('aria-label', enabled
+      ? '自動テーマガチャをオフにする'
+      : '再読み込み時にテーマを引き直す自動テーマガチャをオンにする');
+    toggle.title = enabled
+      ? '自動テーマガチャ: オン（再読み込み時に別のテーマを引きます）'
+      : '自動テーマガチャ: オフ';
+  }
+
+  toggle.addEventListener('click', function () {
+    setAutoGachaEnabled(!isAutoGachaEnabled());
+    renderToggle();
+  });
+
+  renderToggle();
+  switchControl.insertAdjacentElement('afterend', toggle);
+
+  if (isAutoGachaEnabled() && wasReloaded()) {
+    window.location.replace('../../index.html');
+  }
+}
+
 function polishSharedChrome() {
   var themeId = currentThemeId();
   document.querySelectorAll('a[href*="switch=1"]').forEach(function (link) {
@@ -162,6 +209,8 @@ function polishSharedChrome() {
       hero.insertAdjacentElement('afterend', siteMap);
     }
   }
+
+  addAutoGachaToggle();
 }
 
 if (document.readyState === 'loading') {

@@ -25,13 +25,13 @@
 | 機能 / 領域 | 入口 | 関連ファイル | メモ |
 |---|---|---|---|
 | サイト起動（ローダー） | `docs/index.html` | `docs/theme-router.js` | エントリーポイント。ローダー画面を表示してテーマへ遷移 |
-| テーマ選択 / 切替 | `docs/theme-router.js` | `THEMES` 配列 | 重み付きランダム。`?theme=<id>` 固定、`?switch=1` 強制切替、`localStorage` で次回訪問まで保持 |
+| テーマ選択 / 切替 | `docs/theme-router.js` | `THEMES` 配列、`docs/shared/utils.js` | 重み付きランダム。`?theme=<id>` 固定、`?switch=1` 強制切替。自動ガチャがONなら再読み込み時も別テーマを引く |
 | コンテンツデータ | `docs/shared/data.js` | 全テーマの `script.js` | `window.__data`。コンテンツ変更はここだけ |
 | 各テーマ | `docs/themes/<name>/index.html` | 同ディレクトリの `style.css` / `script.js` | 19 テーマ。一覧は `docs/theme-router.js` を正とする |
 | ゲームセクション挿入 | `docs/shared/games.js` | `data.js` の `games` | 通常テーマで Anime 直前に自動挿入 |
 | 成果物セクション挿入 | `docs/shared/projects.js` | `data.js` の `projects` | 通常テーマで Contact 直前に自動挿入 |
 | スクロールナビ共通 | `docs/shared/snap.js` | 各テーマ | 右下の1ボタンで次セクションへ進み、最終位置では先頭へ戻る。`projects.js` の後に読み込む |
-| 共通ユーティリティ | `docs/shared/utils.js` | 全テーマ | `window.__utils`。テーマ切替の補足と共通更新日表示も担当 |
+| 共通ユーティリティ | `docs/shared/utils.js` | 全テーマ | `window.__utils`。テーマ切替の補足、自動ガチャ操作、共通更新日表示も担当 |
 | ヘッダー / 共通導線 | `docs/shared/human-polish.css` | `docs/shared/utils.js`, 各テーマの `style.css` | テーマ切替のコントラスト、行き先一覧、ヒーロー高、浮遊操作の位置・寸法を共通化 |
 | スタイル / テーマ方針 | `DESIGN.md` | 各テーマの `style.css` | カラーパレット・フォント・演出の詳細 |
 | 確認手順 | `ai-docs/TESTING.md` | — | ローカルサーバーでの手動確認 |

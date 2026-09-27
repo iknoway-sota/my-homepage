@@ -44,7 +44,7 @@
 
 | 流れ | 説明 | 入口 |
 |---|---|---|
-| テーマ選択 | URL パラメータ（`?theme=` / `?switch=1`）と `localStorage` を確認し、重み付きランダムで選択して遷移 | `docs/theme-router.js` |
+| テーマ選択 | URL パラメータ（`?theme=` / `?switch=1`）と `localStorage` を確認し、重み付きランダムで選択して遷移。自動ガチャがONなら再読み込み時も別テーマを選ぶ | `docs/theme-router.js` |
 | コンテンツ描画 | ページ読み込み時に各テーマの `script.js` が `window.__data` を読んで DOM を生成 | 各テーマの `script.js` |
 | セクション自動挿入 | `games.js` / `projects.js` が該当セクションを DOM に挿入 | `docs/shared/games.js`, `docs/shared/projects.js` |
 
@@ -52,7 +52,8 @@
 
 | 種類 | 管理場所 | 永続化 | 注意 |
 |---|---|---|---|
-| 選択中テーマ | `localStorage` | 次回訪問まで | リロード・再訪で同じテーマ。切替ボタンで別テーマを保存 |
+| 選択中テーマ | `localStorage` | 次回訪問まで | 自動ガチャがOFFならリロード・再訪で同じテーマ。切替ボタンで別テーマを保存 |
+| 自動テーマガチャ | `localStorage`（`randomThemeOnReload`） | あり | ONならテーマ個別ページの再読み込みを入口へ戻し、現在とは別のテーマを選ぶ |
 | ユーザー設定類 | `localStorage`（`__utils.getLocal` / `setLocal` 経由） | あり | try-catch 付きヘルパーを使う |
 | サーバー状態 | なし | — | バックエンドなし |
 

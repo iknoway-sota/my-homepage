@@ -92,6 +92,7 @@ button {
   --chrome-nav-link-gap: 20px;
   --chrome-nav-link-height: 32px;
   --chrome-switch-width: 144px;
+  --chrome-auto-width: 104px;
   --chrome-switch-height: 34px;
   --chrome-float-size: 48px;
   --chrome-float-right: 24px;
@@ -175,6 +176,43 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.theme-auto-toggle {
+  display: inline-flex;
+  flex: 0 0 var(--chrome-auto-width);
+  align-items: center;
+  justify-content: center;
+  width: var(--chrome-auto-width);
+  min-width: 0;
+  height: var(--chrome-switch-height);
+  margin-left: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid currentColor;
+  border-radius: inherit;
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  color: var(--ink, var(--text, var(--fg, inherit)));
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-auto-toggle[aria-pressed="true"] {
+  background: color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.theme-auto-toggle:where(:hover, :focus-visible) {
+  background: color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.site-nav .theme-auto-toggle {
+  color: var(--text-on-dark) !important;
 }
 
 /* Theme switching is a primary site action. Keep it readable even when a
@@ -450,9 +488,10 @@ button {
   :root {
     --chrome-header-height: 52px;
     --chrome-header-inline: 14px;
-    --chrome-nav-gap: 14px;
-    --chrome-logo-width: 104px;
-    --chrome-switch-width: 132px;
+    --chrome-nav-gap: 8px;
+    --chrome-logo-width: 80px;
+    --chrome-switch-width: 86px;
+    --chrome-auto-width: 96px;
     --chrome-switch-height: 36px;
     --chrome-float-size: 42px;
     --chrome-float-right: 16px;
@@ -467,6 +506,23 @@ button {
     justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
+  }
+
+  .book-header .theme-auto-toggle {
+    flex-basis: 40px;
+    width: 40px;
+    border-color: var(--gold);
+    color: var(--gold);
+    font-size: 0;
+  }
+
+  .book-header .theme-auto-toggle::after {
+    content: "A○";
+    font-size: 0.58rem;
+  }
+
+  .book-header .theme-auto-toggle[aria-pressed="true"]::after {
+    content: "A●";
   }
 
   .chapter-nav::-webkit-scrollbar {

@@ -3,6 +3,7 @@
  *
  * Normal visit:   picks a random theme, stores it in localStorage
  *                 so the preferred theme survives future visits.
+ * Auto gacha:     when enabled, picks a different theme on every visit.
  * ?switch=1:      clears the stored theme, forces a DIFFERENT theme,
  *                 used by every "Switch / Gacha" button on the site.
  * ?theme=classy:  dev override – forces a specific theme.
@@ -47,8 +48,9 @@ function pickTheme(themes) {
  * Priority order:
  *  1. ?switch=1   → force-pick a DIFFERENT theme, persist it
  *  2. ?theme=xxx  → explicit theme choice, persist it
- *  3. localStorage hit → return the saved theme
- *  4. random pick
+ *  3. auto gacha enabled → pick a DIFFERENT theme, persist it
+ *  4. localStorage hit → return the saved theme
+ *  5. random pick
  */
 function resolveTheme() {
   const params = new URLSearchParams(window.location.search);
@@ -61,6 +63,15 @@ function resolveTheme() {
     try { localStorage.setItem('selectedTheme', id); } catch {}
   }
 
+  function isAutoGachaEnabled() {
+    try { return localStorage.getItem('randomThemeOnReload') === 'true'; } catch { return false; }
+  }
+
+  function pickDifferentTheme(current) {
+    const pool = current ? THEMES.filter(t => t.id !== current) : THEMES;
+    return pickTheme(pool.length ? pool : THEMES);
+  }
+
   // ── Switch (Gacha) button was clicked ──────────────────
   if (params.get('switch') === '1') {
     // Strip param from URL so back/refresh doesn't keep re-rolling
@@ -71,8 +82,7 @@ function resolveTheme() {
     const current = getSavedTheme();
 
     // Pick a theme that is DIFFERENT from the current one
-    const pool = current ? THEMES.filter(t => t.id !== current) : THEMES;
-    const chosen = pickTheme(pool.length ? pool : THEMES);
+    const chosen = pickDifferentTheme(current);
     saveTheme(chosen.id);
     return chosen;
   }
@@ -85,6 +95,13 @@ function resolveTheme() {
       saveTheme(found.id);
       return found;
     }
+  }
+
+  // ── Auto gacha: pick a different theme on each visit ────
+  if (isAutoGachaEnabled()) {
+    const chosen = pickDifferentTheme(getSavedTheme());
+    saveTheme(chosen.id);
+    return chosen;
   }
 
   // ── Saved preference: return the already-chosen theme ──
