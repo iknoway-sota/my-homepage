@@ -1,5 +1,11 @@
 # CODEMAP.md
 
+## 原本・生成物・ローカルキャッシュ
+
+- 原本は `docs/` の静的サイト資産と `scripts/`。サイトはビルド不要で、追跡中の `docs/` を直接編集する。
+- `plans/*.html` は Markdown の閲覧用生成物で、`node scripts/md2html.mjs` により再生成する。
+- `docs-html/`、`node_modules/`、`dist/`、`build/`、`test-results/`、`playwright-report/`、`.wrangler/` はローカル生成物・キャッシュとして Git 管理しない。
+
 このファイルは、「この機能はどこにあるか」を素早く見つけるための地図です。
 実装ファイルの一覧をすべて書くのではなく、探索の入口になる場所だけを保守します。
 
