@@ -9,6 +9,8 @@
 (function renderData() {
   var d = window.__data;
   if (!d) return;
+  var escapeHtml = window.__utils.escapeHtml;
+  var safeUrl = window.__utils.safeUrl;
 
   // Hero
   var heroName = document.getElementById('hero-name');
@@ -16,7 +18,7 @@
   var heroTagline = document.getElementById('hero-tagline');
   if (heroName) heroName.textContent = d.profile.name;
   if (heroRole) heroRole.textContent = d.profile.role;
-  if (heroTagline) heroTagline.innerHTML = d.profile.tagline.replace(/\n/g, '<br>');
+  if (heroTagline) heroTagline.innerHTML = escapeHtml(d.profile.tagline).replace(/\n/g, '<br>');
 
   // GSAP SplitText — hero name
   requestAnimationFrame(function () {
@@ -34,9 +36,9 @@
     heroStats.innerHTML = d.heroStats.map(function (s, i) {
       return (i > 0 ? '<div class="stat-divider"></div>' : '') +
         '<div class="stat">' +
-          '<span class="stat-num" data-count="' + s.count + '">0</span>' +
-          '<span class="stat-unit">' + s.unit + '</span>' +
-          '<span class="stat-label">' + s.label + '</span>' +
+          '<span class="stat-num" data-count="' + escapeHtml(s.count) + '">0</span>' +
+          '<span class="stat-unit">' + escapeHtml(s.unit) + '</span>' +
+          '<span class="stat-label">' + escapeHtml(s.label) + '</span>' +
         '</div>';
     }).join('');
   }
@@ -44,14 +46,14 @@
   // About paragraphs
   var aboutP = document.getElementById('about-paragraphs');
   if (aboutP) {
-    aboutP.innerHTML = d.profile.about.map(function (t) { return '<p>' + t + '</p>'; }).join('');
+    aboutP.innerHTML = d.profile.about.map(function (t) { return '<p>' + escapeHtml(t) + '</p>'; }).join('');
   }
 
   // About facts
   var factsUl = document.getElementById('about-facts');
   if (factsUl) {
     factsUl.innerHTML = d.profile.facts.map(function (f) {
-      return '<li><span>' + f.label + '</span>' + f.value + '</li>';
+      return '<li><span>' + escapeHtml(f.label) + '</span>' + escapeHtml(f.value) + '</li>';
     }).join('');
   }
 
@@ -59,7 +61,7 @@
   var traitGrid = document.getElementById('trait-grid');
   if (traitGrid) {
     traitGrid.innerHTML = d.profile.traits.map(function (t) {
-      return '<div class="trait-chip">' + t + '</div>';
+      return '<div class="trait-chip">' + escapeHtml(t) + '</div>';
     }).join('');
   }
 
@@ -69,9 +71,9 @@
     animeGrid.innerHTML = d.anime.map(function (a, i) {
       return '<article class="anime-card reveal">' +
         '<div class="card-num">' + String(i + 1).padStart(2, '0') + '</div>' +
-        '<h3>' + a.title + '</h3>' +
-        '<p>' + a.comment + '</p>' +
-        '<div class="card-tags">' + a.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>' +
+        '<h3>' + escapeHtml(a.title) + '</h3>' +
+        '<p>' + escapeHtml(a.comment) + '</p>' +
+        '<div class="card-tags">' + a.tags.map(function (t) { return '<span>' + escapeHtml(t) + '</span>'; }).join('') + '</div>' +
       '</article>';
     }).join('');
   }
@@ -82,9 +84,9 @@
     moviesGrid.innerHTML = d.movies.map(function (m, i) {
       return '<article class="anime-card reveal">' +
         '<div class="card-num">' + String(i + 1).padStart(2, '0') + '</div>' +
-        '<h3>' + m.title + '</h3>' +
-        '<p>' + m.comment + '</p>' +
-        '<div class="card-tags">' + m.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>' +
+        '<h3>' + escapeHtml(m.title) + '</h3>' +
+        '<p>' + escapeHtml(m.comment) + '</p>' +
+        '<div class="card-tags">' + m.tags.map(function (t) { return '<span>' + escapeHtml(t) + '</span>'; }).join('') + '</div>' +
       '</article>';
     }).join('');
   }
@@ -95,8 +97,8 @@
   if (contactMsg) contactMsg.textContent = d.contact.message;
   if (contactSocial) {
     contactSocial.innerHTML = d.social.map(function (s) {
-      return '<a href="' + s.url + '" target="_blank" rel="noopener" aria-label="' + s.name + '">' +
-        '<span>' + s.name + '</span></a>';
+      return '<a href="' + escapeHtml(safeUrl(s.url)) + '" target="_blank" rel="noopener" aria-label="' + escapeHtml(s.name) + '">' +
+        '<span>' + escapeHtml(s.name) + '</span></a>';
     }).join('');
   }
 })();

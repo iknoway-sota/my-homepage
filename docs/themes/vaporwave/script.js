@@ -5,23 +5,25 @@
 (function renderData() {
   var d = window.__data;
   if (!d) return;
+  var escapeHtml = window.__utils.escapeHtml;
+  var safeUrl = window.__utils.safeUrl;
 
   var heroName = document.getElementById('hero-name');
   var heroRole = document.getElementById('hero-role');
   var heroTagline = document.getElementById('hero-tagline');
   if (heroName) heroName.textContent = d.profile.name;
   if (heroRole) heroRole.textContent = d.profile.role;
-  if (heroTagline) heroTagline.innerHTML = d.profile.tagline.replace(/\n/g, '<br>');
+  if (heroTagline) heroTagline.innerHTML = escapeHtml(d.profile.tagline).replace(/\n/g, '<br>');
 
   var aboutP = document.getElementById('about-paragraphs');
   if (aboutP) {
-    aboutP.innerHTML = d.profile.about.map(function (t) { return '<p>' + t + '</p>'; }).join('');
+    aboutP.innerHTML = d.profile.about.map(function (t) { return '<p>' + escapeHtml(t) + '</p>'; }).join('');
   }
 
   var facts = document.getElementById('about-facts');
   if (facts) {
     facts.innerHTML = d.profile.facts.map(function (f) {
-      return '<div class="fact-block"><div class="fact-label">' + f.label + '</div><div class="fact-value">' + f.value + '</div></div>';
+      return '<div class="fact-block"><div class="fact-label">' + escapeHtml(f.label) + '</div><div class="fact-value">' + escapeHtml(f.value) + '</div></div>';
     }).join('');
   }
 
@@ -31,9 +33,9 @@
     grid.innerHTML = items.map(function (item, i) {
       return '<article class="work-card reveal">' +
         '<div class="work-number">' + String(i + 1).padStart(2, '0') + '</div>' +
-        '<h3>' + item.title + '</h3>' +
-        '<p>' + item.comment + '</p>' +
-        '<div class="work-tags">' + item.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>' +
+        '<h3>' + escapeHtml(item.title) + '</h3>' +
+        '<p>' + escapeHtml(item.comment) + '</p>' +
+        '<div class="work-tags">' + item.tags.map(function (t) { return '<span>' + escapeHtml(t) + '</span>'; }).join('') + '</div>' +
       '</article>';
     }).join('');
   }
@@ -46,8 +48,8 @@
   if (contactMsg) contactMsg.textContent = d.contact.message;
   if (contactSocial) {
     contactSocial.innerHTML = d.social.map(function (s) {
-      return '<a href="' + s.url + '" target="_blank" rel="noopener" aria-label="' + s.name + '">' +
-        '<span>' + s.name + '</span></a>';
+      return '<a href="' + escapeHtml(safeUrl(s.url)) + '" target="_blank" rel="noopener" aria-label="' + escapeHtml(s.name) + '">' +
+        '<span>' + escapeHtml(s.name) + '</span></a>';
     }).join('');
   }
 })();

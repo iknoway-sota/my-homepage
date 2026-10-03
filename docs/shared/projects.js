@@ -7,18 +7,11 @@
 
   var data = window.__data;
   if (!data || !Array.isArray(data.projects) || data.projects.length === 0) return;
+  var escapeHtml = window.__utils.escapeHtml;
+  var safeUrl = window.__utils.safeUrl;
 
   var contact = document.getElementById('contact');
   if (!contact || document.getElementById('projects')) return;
-
-  function escapeHtml(value) {
-    return String(value)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
 
   function labelForTheme() {
     var firstNav = document.querySelector('.nav-links a');
@@ -51,7 +44,7 @@
     var tags = Array.isArray(project.tags) ? project.tags : [];
     return '<article class="project-card reveal">' +
       '<p class="project-index">' + String(index + 1).padStart(2, '0') + '</p>' +
-      '<h3><a href="' + escapeHtml(project.url) + '" target="_blank" rel="noopener">' +
+      '<h3><a href="' + escapeHtml(safeUrl(project.url)) + '" target="_blank" rel="noopener">' +
       escapeHtml(project.name) + '</a></h3>' +
       '<p>' + escapeHtml(project.description || project.url) + '</p>' +
       '<div class="project-tags">' + tags.map(function (tag) {

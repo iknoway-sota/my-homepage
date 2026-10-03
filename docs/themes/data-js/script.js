@@ -7,15 +7,7 @@
 
   var target = document.getElementById('data-source');
   if (!target) return;
-
-  function escapeHtml(value) {
-    return String(value)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
+  var escapeHtml = window.__utils.escapeHtml;
 
   function renderSource(source) {
     target.innerHTML = source.split('\n').map(function (line) {

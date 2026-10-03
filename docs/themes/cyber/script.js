@@ -9,6 +9,8 @@
 (function renderData() {
   const d = window.__data;
   if (!d) return;
+  var escapeHtml = window.__utils.escapeHtml;
+  var safeUrl = window.__utils.safeUrl;
 
   // Hero
   const heroRole = document.getElementById('hero-role-anime');
@@ -40,9 +42,9 @@
     heroStats.innerHTML = d.heroStats.map((s, i) =>
       (i > 0 ? '<div class="stat-divider"></div>' : '') +
       '<div class="stat">' +
-        '<span class="stat-num" data-count="' + s.count + '">0</span>' +
-        '<span class="stat-unit">' + s.unit + '</span>' +
-        '<span class="stat-label">' + s.label + '</span>' +
+        '<span class="stat-num" data-count="' + escapeHtml(s.count) + '">0</span>' +
+        '<span class="stat-unit">' + escapeHtml(s.unit) + '</span>' +
+        '<span class="stat-label">' + escapeHtml(s.label) + '</span>' +
       '</div>'
     ).join('');
   }
@@ -51,23 +53,23 @@
   const idData = document.getElementById('profile-id-data');
   if (idData) {
     idData.innerHTML =
-      '<div class="id-row"><span>NAME</span><strong>' + d.profile.name + '</strong></div>' +
+      '<div class="id-row"><span>NAME</span><strong>' + escapeHtml(d.profile.name) + '</strong></div>' +
       '<div class="id-row"><span>CLASS</span><strong>Otaku S+</strong></div>' +
-      '<div class="id-row"><span>BASE</span><strong>' + d.profile.facts[0].value + '</strong></div>' +
-      '<div class="id-row"><span>EXP</span><strong>' + d.profile.facts[1].value + '</strong></div>';
+      '<div class="id-row"><span>BASE</span><strong>' + escapeHtml(d.profile.facts[0].value) + '</strong></div>' +
+      '<div class="id-row"><span>EXP</span><strong>' + escapeHtml(d.profile.facts[1].value) + '</strong></div>';
   }
 
   // About paragraphs
   const aboutP = document.getElementById('about-paragraphs-anime');
   if (aboutP) {
-    aboutP.innerHTML = d.profile.about.map(t => '<p>' + t + '</p>').join('');
+    aboutP.innerHTML = d.profile.about.map(t => '<p>' + escapeHtml(t) + '</p>').join('');
   }
 
   // Trait grid
   const traitGrid = document.getElementById('trait-grid');
   if (traitGrid) {
     traitGrid.innerHTML = d.profile.traits.map(t =>
-      '<div class="trait-chip">' + t + '</div>'
+      '<div class="trait-chip">' + escapeHtml(t) + '</div>'
     ).join('');
   }
 
@@ -78,9 +80,9 @@
       '<article class="work-card reveal">' +
         '<div class="card-inner">' +
           '<div class="card-num">' + String(i + 1).padStart(2, '0') + '</div>' +
-          '<h3>' + a.title + '</h3>' +
-          '<p>' + a.comment + '</p>' +
-          '<div class="card-tags">' + a.tags.map(t => '<span>' + t + '</span>').join('') + '</div>' +
+          '<h3>' + escapeHtml(a.title) + '</h3>' +
+          '<p>' + escapeHtml(a.comment) + '</p>' +
+          '<div class="card-tags">' + a.tags.map(t => '<span>' + escapeHtml(t) + '</span>').join('') + '</div>' +
         '</div>' +
       '</article>'
     ).join('');
@@ -93,9 +95,9 @@
       '<article class="work-card reveal">' +
         '<div class="card-inner">' +
           '<div class="card-num">' + String(i + 1).padStart(2, '0') + '</div>' +
-          '<h3>' + m.title + '</h3>' +
-          '<p>' + m.comment + '</p>' +
-          '<div class="card-tags">' + m.tags.map(t => '<span>' + t + '</span>').join('') + '</div>' +
+          '<h3>' + escapeHtml(m.title) + '</h3>' +
+          '<p>' + escapeHtml(m.comment) + '</p>' +
+          '<div class="card-tags">' + m.tags.map(t => '<span>' + escapeHtml(t) + '</span>').join('') + '</div>' +
         '</div>' +
       '</article>'
     ).join('');
@@ -107,12 +109,12 @@
   const contactSocial = document.getElementById('contact-social-anime');
   if (contactMsg) contactMsg.textContent = '> ' + d.contact.message;
   if (contactEmail) {
-    contactEmail.href = 'mailto:' + d.contact.email;
+    contactEmail.href = safeUrl('mailto:' + d.contact.email);
   }
   if (contactSocial) {
     contactSocial.innerHTML = d.social.map(s =>
-      '<a href="' + s.url + '" target="_blank" rel="noopener" aria-label="' + s.name + '">' +
-      '<span>' + s.name + '</span></a>'
+      '<a href="' + escapeHtml(safeUrl(s.url)) + '" target="_blank" rel="noopener" aria-label="' + escapeHtml(s.name) + '">' +
+      '<span>' + escapeHtml(s.name) + '</span></a>'
     ).join('');
   }
 })();

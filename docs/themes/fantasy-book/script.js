@@ -17,15 +17,8 @@
   var wheelTimer = null;
 
   if (!data || !book) return;
-
-  function escapeHtml(value) {
-    return String(value)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
+  var escapeHtml = window.__utils.escapeHtml;
+  var safeUrl = window.__utils.safeUrl;
 
   function tagList(tags) {
     return '<div class="rune-tags">' + tags.map(function (tag) {
@@ -54,7 +47,7 @@
   function projectEntry(item, index) {
     return '<article class="entry">' +
       '<p class="entry-index">Artifact ' + String(index + 1).padStart(2, '0') + '</p>' +
-      '<h3><a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">' +
+      '<h3><a href="' + escapeHtml(safeUrl(item.url)) + '" target="_blank" rel="noopener">' +
       escapeHtml(item.name) + '</a></h3>' +
       '<p>' + escapeHtml(item.description || item.url) + '</p>' +
       tagList(item.tags || []) +
@@ -81,7 +74,7 @@
 
   function socialLinks() {
     return data.social.map(function (social) {
-      return '<a href="' + escapeHtml(social.url) + '" target="_blank" rel="noopener" aria-label="' +
+      return '<a href="' + escapeHtml(safeUrl(social.url)) + '" target="_blank" rel="noopener" aria-label="' +
         escapeHtml(social.name) + '">' +
         '<span>' + escapeHtml(social.name) + '</span></a>';
     }).join('');
@@ -177,7 +170,7 @@
         'Contact',
         '<p class="chapter-kicker">Chapter IX</p>' +
           '<p class="body-copy body-copy-large">' + escapeHtml(data.contact.message) + '</p>' +
-          '<a class="email-link" href="mailto:' + escapeHtml(data.contact.email) + '">' +
+          '<a class="email-link" href="' + escapeHtml(safeUrl('mailto:' + data.contact.email)) + '">' +
           escapeHtml(data.contact.email) + '</a>',
         '<p class="chapter-kicker">Gateways</p>' +
           '<div class="social-links">' + socialLinks() + '</div>' +

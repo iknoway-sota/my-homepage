@@ -19,7 +19,7 @@
 | 目的 | コマンド | 備考 |
 |---|---|---|
 | ローカルサーバー起動 | `cd docs && python3 -m http.server 8080` | または `npx serve docs` |
-| AI docs 鮮度チェック | `bash scripts/ai-docs-status.sh` | `--check` で CI 用 exit code |
+| 描画回帰チェック | `node scripts/check-render.mjs` | `HEAD` と現在の全テーマのデータ描画テキスト・要素数を比較 |
 
 ## テスト方針
 

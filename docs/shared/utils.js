@@ -96,6 +96,26 @@ function trapFocus(container) {
 
 /* ── Misc ─────────────────────────────────────────────────── */
 
+/** Escape a value for safe insertion into HTML text or attributes. */
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Allow only http(s), mailto, and ordinary relative URLs. */
+function safeUrl(value) {
+  var url = String(value || '').trim();
+  if (!url) return '#';
+  if (/^(https?:|mailto:)/i.test(url)) return url;
+  if (/^(?:\.\/|\.\.\/|\/[^/]|#|\?)/.test(url)) return url;
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(url) && !url.startsWith('//')) return url;
+  return '#';
+}
+
 /** Copy text to clipboard. Returns a Promise<boolean>. */
 async function copyToClipboard(text) {
   try {
@@ -226,4 +246,5 @@ window.__utils = {
   throttle, debounce,
   getLocal, setLocal,
   trapFocus, copyToClipboard, prefersReducedMotion,
+  escapeHtml, safeUrl,
 };

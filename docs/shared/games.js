@@ -7,18 +7,10 @@
 
   var data = window.__data;
   if (!data || !Array.isArray(data.games) || data.games.length === 0) return;
+  var escapeHtml = window.__utils.escapeHtml;
 
   var anime = document.getElementById('anime');
   if (!anime || document.getElementById('games')) return;
-
-  function escapeHtml(value) {
-    return String(value)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
 
   function themeMode() {
     var firstNav = document.querySelector('.nav-links a');
